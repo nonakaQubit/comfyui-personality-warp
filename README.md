@@ -7,8 +7,6 @@
 技術者的に言うと個性ID（`personality_id`）をシードとして拡散モデルの中間層パラメータに微小な決定論的摂動（ゆがみ）を加え、生成画像に一貫した「個性・クセ」を持たせる実験用 ComfyUI カスタムノードです。
 計算した中間パラーメタを別IDから出したものと演算することで、個性の足し算や混ぜ合わせも可能でしょう(多分)
 
-
-
 ---
 
 ## 背景・仮説（Hypothesis）
@@ -43,7 +41,7 @@
   * `gaussian`: 各層の重み標準偏差 $\sigma_W$ に比例した等方性ガウス摂動。
   * `rademacher`: $\pm 1$ の定ノルム摂動。
 * **層ごとの相対スケーリング**
-  * 摂動の大きさは各テンソルの標準偏差 $\sigma_W$ に比例してスケーリングされるため、`strength = 0.01 〜 0.05` 程度で安定して効き具合を調整できます。
+  * 摂動の大きさは各テンソルの標準偏差 $\sigma_W$ に比例してスケーリングされるため、`strength = 〜 0.5` 程度で効き具合を調整できます。
 
 ---
 
@@ -63,12 +61,12 @@ git clone https://github.com/nonakaQubit/comfyui-personality-warp.git
 | パラメータ | 説明 | 目安 |
 | :--- | :--- | :--- |
 | `personality_id` | 個性を決める任意の文字列（例: `"alice"`, `"001"`）。同じIDなら常に同じ摂動を再現します。 | 任意 |
-| `strength` | 歪みの強さ（各層の重み標準偏差に対する倍率）。`0.0` でバイパス。 | `0.01` 〜 `0.05` |
+| `strength` | 歪みの強さ（各層の重み標準偏差に対する倍率）。`0.0` でバイパス。 | 大きいほど個性(歪み)が出ます。サンプルは `0.2`。大きくして、それでも「見える絵」を探すとより個性的な絵になると思われます |
 | `mode` | `low_rank`（推奨）/ `gaussian` / `rademacher` | `low_rank` |
 | `layer_scope` | `middle_only`（中央層のみ）/ `mid_band`（中間帯域）/ `custom_range` | `middle_only` |
 | `target_part` | `attention_and_mlp` / `attention_only` / `mlp_only` / `all_weights` | `attention_and_mlp` |
 | `rank` | `low_rank` モード時のランク数 | `4` |
-| `layer_start` / `layer_end` | `custom_range` 選択時の開始・終了割合（`0.0` 〜 `1.0`） | `0.35` 〜 `0.65` |
+| `layer_start` / `layer_end` | `custom_range` 選択時の開始・終了割合（`0.0` 〜 `1.0`）数字が小さいとより根本的に変わります | サンプルは `0.45` 〜 `0.95` |
 
 ---
 
